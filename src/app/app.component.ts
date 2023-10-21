@@ -8,16 +8,21 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet],
-  template: '<button (click)="log()">ログ</button>',
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   constructor(private http: HttpClient) {}
 
   title = 'book-keeping-title';
+  message = 'message';
 
   async log() {
-    const result: any = await firstValueFrom(this.http.get('/api/helloworld'));
-    console.log(result.value);
+    const result = await firstValueFrom(this.http.get<Hello>('/api/hello'));
+    this.message = result.value;
   }
 }
+
+type Hello = {
+  value: string;
+};

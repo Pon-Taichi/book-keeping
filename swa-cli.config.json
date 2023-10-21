@@ -6,6 +6,7 @@
       "apiLocation": "api",
       "outputLocation": "dist/book-keeping",
       "appBuildCommand": "npm run build",
+      "apiBuildCommand": "npm run build",
       "run": "npm start",
       "appDevserverUrl": "http://localhost:4200"
     }

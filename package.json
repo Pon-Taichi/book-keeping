@@ -2,15 +2,15 @@
   "name": "book-keeping",
   "version": "0.0.0",
   "scripts": {
+    "dev": "npm --prefix ./api run prestart && swa start --api-location ./api",
+    "debug": "swa start --api-location http://localhost:7071",
+    "swa": "swa",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint",
-    "swa": "swa",
-    "dev": "swa start --api-location ./api",
-    "api": "cd api && npm run start"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
