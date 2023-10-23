@@ -20,7 +20,7 @@ export async function hello(
 }
 
 app.http('hello', {
-  methods: ['GET', 'POST'],
+  methods: ['GET'],
   authLevel: 'anonymous',
   handler: hello,
 });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -11,61 +11,54 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatListModule,
-  ],
-  template: `
-    <div class="header">
-      <mat-toolbar class="header-content" color="primary">
-        <span class="title">{{ title }}</span>
-        <span class="spacer"></span>
-        <button
-          mat-icon-button
-          class="manage_accounts-icon"
-          aria-label="manage accounts icon"
-        >
-          <mat-icon>manage_accounts</mat-icon>
-        </button>
-      </mat-toolbar>
-    </div>
+    selector: 'app-root',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterModule,
+        MatButtonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatListModule,
+    ],
+    template: `
+        <div class="header">
+            <mat-toolbar class="header-content">
+                <span class="title">{{ title }}</span>
+                <span class="spacer"></span>
+                <button
+                    mat-icon-button
+                    class="manage_accounts-icon"
+                    aria-label="manage accounts icon"
+                >
+                    <mat-icon>manage_accounts</mat-icon>
+                </button>
+            </mat-toolbar>
+        </div>
 
-    <mat-drawer-container class="drawer">
-      <mat-drawer class="sidebar" mode="side" opened>
-        <mat-nav-list class="menu-list">
-          <mat-list-item matListItemTitle class="menu-item">
-            <mat-icon matListItemIcon>playlist_add</mat-icon>
-            <a routerLink="/records"> 仕訳入力 </a>
-          </mat-list-item>
-        </mat-nav-list>
-      </mat-drawer>
-      <mat-drawer-content class="container">
-        <button mat-raised-button (click)="log()">ログ</button>
-        <router-outlet></router-outlet>
-      </mat-drawer-content>
-    </mat-drawer-container>
-  `,
-  styleUrls: ['./app.component.css'],
+        <mat-drawer-container class="drawer">
+            <mat-drawer class="sidebar" mode="side" opened>
+                <mat-nav-list class="menu-list">
+                    <mat-list-item matListItemTitle class="menu-item">
+                        <mat-icon matListItemIcon>playlist_add</mat-icon>
+                        <a routerLink="/records"> 仕訳入力 </a>
+                    </mat-list-item>
+                </mat-nav-list>
+            </mat-drawer>
+            <mat-drawer-content class="container">
+                <router-outlet></router-outlet>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    `,
+    styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  constructor(private http: HttpClient) {}
+export class AppComponent implements OnInit {
+    constructor(private http: HttpClient) {}
 
-  title = '個別会計システム';
-  message = 'message';
+    title = '個別会計システム';
 
-  async log() {
-    const result = await firstValueFrom(this.http.get<Hello>('/api/hello'));
-    this.message = result.value;
-  }
+    ngOnInit(): void {
+        firstValueFrom(this.http.get('/api/hello'));
+    }
 }
-
-type Hello = {
-  value: string;
-};

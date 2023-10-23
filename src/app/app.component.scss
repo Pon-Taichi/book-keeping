@@ -1,0 +1,38 @@
+@use "../custom-theme.scss" as theme;
+
+.header {
+    font-weight: bold;
+    border-bottom: 1px solid map-get(theme.$book-keeping-primary, 100);
+}
+
+.header .header-content {
+    background-color: map-get(theme.$book-keeping-primary, 20);
+    padding: 0 30px;
+}
+
+.header .title {
+    font-size: large;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.drawer {
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+}
+
+.sidebar {
+    width: 220px;
+}
+
+.menu-list {
+    padding: 0;
+}
+
+.menu-item a {
+    color: inherit;
+    text-decoration: none;
+}
