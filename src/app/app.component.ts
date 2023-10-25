@@ -23,23 +23,10 @@ import { MatListModule } from '@angular/material/list';
         MatListModule,
     ],
     template: `
-        <div class="header">
-            <mat-toolbar class="header-content">
-                <span class="title">{{ title }}</span>
-                <span class="spacer"></span>
-                <button
-                    mat-icon-button
-                    class="manage_accounts-icon"
-                    aria-label="manage accounts icon"
-                >
-                    <mat-icon>manage_accounts</mat-icon>
-                </button>
-            </mat-toolbar>
-        </div>
-
         <mat-drawer-container class="drawer">
             <mat-drawer class="sidebar" mode="side" opened>
                 <mat-nav-list class="menu-list">
+                    <h3 class="title">{{ title }}</h3>
                     <mat-list-item matListItemTitle class="menu-item">
                         <mat-icon matListItemIcon>playlist_add</mat-icon>
                         <a routerLink="/records"> 仕訳入力 </a>
@@ -47,6 +34,18 @@ import { MatListModule } from '@angular/material/list';
                 </mat-nav-list>
             </mat-drawer>
             <mat-drawer-content class="container">
+                <div class="header">
+                    <mat-toolbar class="header-content">
+                        <span class="spacer"></span>
+                        <button
+                            mat-icon-button
+                            class="manage_accounts-icon"
+                            aria-label="manage accounts icon"
+                        >
+                            <mat-icon>manage_accounts</mat-icon>
+                        </button>
+                    </mat-toolbar>
+                </div>
                 <router-outlet></router-outlet>
             </mat-drawer-content>
         </mat-drawer-container>

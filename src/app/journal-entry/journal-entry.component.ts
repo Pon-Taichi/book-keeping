@@ -2,14 +2,15 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-journal-entry',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, MatButtonModule],
     template: `
         <p>{{ message }}</p>
-        <button mat-raised-button (click)="log()">ログ</button>
+        <button mat-raised-button color="primary" (click)="log()">ログ</button>
     `,
     styles: [],
 })
