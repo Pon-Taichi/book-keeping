@@ -1,0 +1,32 @@
+.date-and-counter {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 2.5em;
+}
+
+.date-and-counter .date {
+    margin-right: 1em;
+}
+.journal-form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.debit,
+.credit {
+    padding: 1em 2.5em;
+}
+
+.account-name {
+    margin-right: 1em;
+}
+
+.amount {
+    width: 10em;
+}
+
+.submit-button {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 6em;
+}

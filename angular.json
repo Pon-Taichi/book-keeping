@@ -29,7 +29,7 @@
                         "polyfills": ["zone.js"],
                         "tsConfig": "tsconfig.app.json",
                         "assets": ["src/favicon.ico", "src/assets"],
-                        "styles": ["src/custom-theme.scss", "src/styles.scss"],
+                        "styles": ["src/styles.scss"],
                         "scripts": []
                     },
                     "configurations": {
@@ -63,10 +63,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                            "browserTarget": "book-keeping:build:production"
+                            "buildTarget": "book-keeping:build:production"
                         },
                         "development": {
-                            "browserTarget": "book-keeping:build:development"
+                            "buildTarget": "book-keeping:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "book-keeping:build"
+                        "buildTarget": "book-keeping:build"
                     }
                 },
                 "test": {
