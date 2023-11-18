@@ -4,7 +4,7 @@
         "book-keeping": {
             "appLocation": ".",
             "apiLocation": "api",
-            "outputLocation": "dist/book-keeping/browser",
+            "outputLocation": "dist/book-keeping",
             "appBuildCommand": "npm run build",
             "apiBuildCommand": "npm run build",
             "run": "npm start",
