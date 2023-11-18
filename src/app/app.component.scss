@@ -12,6 +12,19 @@
     border-right-color: map-get(theme.$book-keeping-primary, 100);
 }
 
+mat-list-item {
+    padding: 0;
+}
+
+.title {
+    height: 64px;
+    font-size: large;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .menu-list {
     padding: 0;
     display: flex;
@@ -22,6 +35,19 @@
 .menu-item a {
     color: inherit;
     text-decoration: none;
+    width: 100%;
+    padding: 0.75em 0;
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.menu-item mat-icon {
+    padding-left: 1em;
+}
+
+.menu-item .menu-name {
+    padding-left: 2em;
 }
 
 .header {
@@ -34,5 +60,5 @@
 }
 
 .content {
-    padding: 0 1.5em;
+    padding: 0 4em;
 }

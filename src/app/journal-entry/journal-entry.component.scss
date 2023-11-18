@@ -1,7 +1,6 @@
 .date-and-partner {
     display: flex;
     justify-content: flex-start;
-    padding-left: 2.5em;
 }
 
 .date-and-partner .date {
@@ -11,11 +10,11 @@
 .journal-form {
     display: flex;
     justify-content: flex-start;
+    padding: 1em 0;
 }
 
-.debit,
-.credit {
-    padding: 1em 2.5em;
+.debit {
+    padding-right: 5em;
 }
 
 .account-name {
@@ -34,5 +33,5 @@
 .submit-button {
     display: flex;
     justify-content: flex-end;
-    padding-right: 6em;
+    padding-right: 5em;
 }

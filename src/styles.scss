@@ -63,6 +63,7 @@ $book-keeping-theme: mat.define-light-theme(
             accent: $book-keeping-accent,
             warn: $book-keeping-warn,
         ),
+        typography: mat.define-typography-config(),
     )
 );
 

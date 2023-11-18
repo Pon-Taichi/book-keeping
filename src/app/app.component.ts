@@ -24,14 +24,22 @@ import { MatListModule } from '@angular/material/list';
         <mat-drawer-container class="drawer">
             <mat-drawer class="sidebar" mode="side" opened>
                 <mat-nav-list class="menu-list">
-                    <h3 class="title">{{ title }}</h3>
-                    <mat-list-item matListItemTitle class="menu-item">
-                        <mat-icon matListItemIcon>playlist_add</mat-icon>
-                        <a routerLink="/records">仕訳入力</a>
+                    <div class="title">
+                        {{ title }}
+                    </div>
+
+                    <mat-list-item class="menu-item">
+                        <a routerLink="/records">
+                            <mat-icon matListItemIcon>playlist_add</mat-icon>
+                            <span class="menu-name">仕訳入力</span>
+                        </a>
                     </mat-list-item>
-                    <mat-list-item matListItemTitle class="menu-item">
-                        <mat-icon matListItemIcon>account_balance</mat-icon>
-                        <a routerLink="/records">個別財務諸表</a>
+
+                    <mat-list-item class="menu-item">
+                        <a routerLink="/accounts">
+                            <mat-icon matListItemIcon>dataset_linked</mat-icon>
+                            <span class="menu-name">勘定科目一覧</span>
+                        </a>
                     </mat-list-item>
                 </mat-nav-list>
             </mat-drawer>
