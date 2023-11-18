@@ -1,15 +1,16 @@
-.date-and-counter {
+.date-and-partner {
     display: flex;
     justify-content: flex-start;
     padding-left: 2.5em;
 }
 
-.date-and-counter .date {
+.date-and-partner .date {
     margin-right: 1em;
 }
+
 .journal-form {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
 }
 
 .debit,
@@ -23,6 +24,11 @@
 
 .amount {
     width: 10em;
+}
+
+.total-amount {
+    text-align: end;
+    padding-right: 3em;
 }
 
 .submit-button {

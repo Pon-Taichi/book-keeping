@@ -1,0 +1,149 @@
+<form [formGroup]="journalGroup" (ngSubmit)="onSubmit()">
+    <div class="date-and-partner">
+        <mat-form-field class="date">
+            <mat-label for="date">日付</mat-label>
+            <input
+                matInput
+                [matDatepicker]="picker"
+                id="date"
+                formControlName="date"
+            />
+            <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="partner">
+            <mat-label for="partner">取引先</mat-label>
+            <input
+                matInput
+                id="partner"
+                type="text"
+                formControlName="partner"
+            />
+        </mat-form-field>
+    </div>
+    <div class="journal-form">
+        <div class="debit" formArrayName="debitEntries">
+            <p>借方</p>
+            <div
+                *ngFor="
+                    let debitEntry of journalGroup.controls.debitEntries
+                        .controls;
+                    let i = index
+                "
+                [formGroupName]="i"
+            >
+                <mat-form-field appearance="outline" class="account-name">
+                    <mat-label for="debit-account">借方科目</mat-label>
+                    <input
+                        matInput
+                        id="debit-account"
+                        type="text"
+                        formControlName="account"
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="amount">
+                    <mat-label for="debit-amount">金額</mat-label>
+                    <input
+                        matInput
+                        id="debit-amount"
+                        type="number"
+                        min="0"
+                        formControlName="amount"
+                    />
+                </mat-form-field>
+
+                <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    (click)="journalGroup.controls.debitEntries.removeAt(i)"
+                    [disabled]="i === 0"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+
+            <button
+                mat-button
+                color="primary"
+                type="button"
+                (click)="addDebitEntry()"
+            >
+                <mat-icon>add</mat-icon>
+                借方科目追加
+            </button>
+
+            <p class="total-amount">
+                借方合計:
+                {{ debitTotal }}
+            </p>
+        </div>
+
+        <div class="credit" formArrayName="creditEntries">
+            <p>貸方</p>
+            <div
+                *ngFor="
+                    let creditEntry of journalGroup.controls.creditEntries
+                        .controls;
+                    let i = index
+                "
+                [formGroupName]="i"
+            >
+                <mat-form-field appearance="outline" class="account-name">
+                    <mat-label for="credit-account">貸方科目</mat-label>
+                    <input
+                        matInput
+                        id="credit-account"
+                        type="text"
+                        formControlName="account"
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="amount">
+                    <mat-label for="credit-amount">金額</mat-label>
+                    <input
+                        matInput
+                        id="credit-amount"
+                        type="number"
+                        min="0"
+                        formControlName="amount"
+                    />
+                </mat-form-field>
+
+                <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    (click)="journalGroup.controls.creditEntries.removeAt(i)"
+                    [disabled]="i === 0"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+
+            <button
+                mat-button
+                color="primary"
+                type="button"
+                (click)="addCreditEntry()"
+            >
+                <mat-icon>add</mat-icon>
+                貸方科目追加
+            </button>
+
+            <p class="total-amount">
+                貸方合計:
+                {{ creditTotal }}
+            </p>
+        </div>
+    </div>
+
+    <div class="submit-button">
+        <button mat-raised-button color="primary" type="submit">保存</button>
+    </div>
+</form>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,11 +6,25 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
+import {
+    FormArray,
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    ValidationErrors,
+    ValidatorFn,
+    Validators,
+} from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { JPDateAdapter } from '../date-adapter';
 
 @Component({
     selector: 'app-journal-entry',
     standalone: true,
+    providers: [{ provide: DateAdapter, useClass: JPDateAdapter }],
     imports: [
         CommonModule,
         MatButtonModule,
@@ -19,99 +33,100 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
         MatTableModule,
         MatInputModule,
         MatGridListModule,
+        MatIconModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
         ReactiveFormsModule,
     ],
-    template: `
-        <form [formGroup]="journalGroup" (ngSubmit)="onSubmit()">
-            <div class="date-and-partner">
-                <mat-form-field appearance="outline" class="date">
-                    <mat-label for="date">日付</mat-label>
-                    <input
-                        matInput
-                        id="date"
-                        type="date"
-                        formControlName="date"
-                    />
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="partner">
-                    <mat-label for="partner">取引先</mat-label>
-                    <input
-                        matInput
-                        id="partner"
-                        type="text"
-                        formControlName="partner"
-                    />
-                </mat-form-field>
-            </div>
-            <div class="journal-form">
-                <div class="debit">
-                    <mat-form-field appearance="outline" class="account-name">
-                        <mat-label for="debit-account">借方科目</mat-label>
-                        <input
-                            matInput
-                            id="debit-account"
-                            type="text"
-                            formControlName="debitAccount"
-                        />
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline" class="amount">
-                        <mat-label for="debit-amount">金額</mat-label>
-                        <input
-                            matInput
-                            id="debit-amount"
-                            type="text"
-                            formControlName="debitAmount"
-                        />
-                    </mat-form-field>
-                </div>
-
-                <div class="credit">
-                    <mat-form-field appearance="outline" class="account-name">
-                        <mat-label for="credit-account">貸方科目</mat-label>
-                        <input
-                            matInput
-                            id="credit-account"
-                            type="text"
-                            formControlName="creditAccount"
-                        />
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline" class="amount">
-                        <mat-label for="credit-amount">金額</mat-label>
-                        <input
-                            matInput
-                            id="credit-amount"
-                            type="text"
-                            formControlName="creditAmount"
-                        />
-                    </mat-form-field>
-                </div>
-            </div>
-
-            <div class="submit-button">
-                <button mat-raised-button color="primary" type="submit">
-                    保存
-                </button>
-            </div>
-        </form>
-    `,
+    templateUrl: './journal-entry.component.html',
     styleUrls: ['./journal-entry.component.scss'],
 })
-export class JournalEntryComponent {
+export class JournalEntryComponent implements OnInit, OnDestroy {
     constructor(private form: FormBuilder) {}
+    private subscriptions: Subscription[] = [];
 
-    journalGroup = this.form.group({
-        date: this.form.control<Date | null>(null),
-        partner: this.form.control<string>(''),
-        debitAccount: this.form.control<string>(''),
-        debitAmount: this.form.control<number | undefined>(undefined),
-        creditAccount: this.form.control<string>(''),
-        creditAmount: this.form.control<number | undefined>(undefined),
-    });
+    ngOnInit(): void {
+        this.subscriptions.push(
+            this.journalGroup.controls.debitEntries.valueChanges.subscribe(
+                () => {
+                    this.debitTotal = this.calculateTotal(
+                        this.journalGroup.controls.debitEntries
+                    );
+                }
+            ),
+            this.journalGroup.controls.creditEntries.valueChanges.subscribe(
+                () => {
+                    this.creditTotal = this.calculateTotal(
+                        this.journalGroup.controls.creditEntries
+                    );
+                }
+            )
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach((subscription) =>
+            subscription.unsubscribe()
+        );
+    }
+
+    journalGroup = this.form.group(
+        {
+            date: this.form.control<Date | null>(null, Validators.required),
+            partner: this.form.control<string>('', Validators.required),
+
+            // 初期値はentryが1つ
+            debitEntries: this.form.array<FormGroup>([this.createEntry()]),
+            creditEntries: this.form.array<FormGroup>([this.createEntry()]),
+        },
+        { validators: this.validateTotals() }
+    );
+
+    debitTotal = this.calculateTotal(this.journalGroup.controls.debitEntries);
+    creditTotal = this.calculateTotal(this.journalGroup.controls.creditEntries);
+
+    createEntry(): FormGroup {
+        return this.form.group({
+            account: this.form.control<string>('', Validators.required),
+            amount: this.form.control<number>(0),
+        });
+    }
+
+    addDebitEntry() {
+        this.journalGroup.controls.debitEntries.push(this.createEntry());
+    }
+
+    addCreditEntry() {
+        this.journalGroup.controls.creditEntries.push(this.createEntry());
+    }
+
+    resetJournalForm() {
+        this.journalGroup.reset();
+        this.journalGroup.controls.debitEntries.clear();
+        this.journalGroup.controls.creditEntries.clear();
+
+        this.addCreditEntry();
+        this.addDebitEntry();
+    }
 
     onSubmit() {
-        console.log(this.journalGroup.value);
+        if (this.journalGroup.invalid) {
+            return;
+        }
+        this.resetJournalForm();
+    }
+
+    calculateTotal(entries: FormArray): number {
+        return entries.controls
+            .map((control) => Number(control.get('amount')?.value) || 0)
+            .reduce((acc, value) => acc + value, 0);
+    }
+
+    validateTotals(): ValidatorFn {
+        return (): ValidationErrors | null => {
+            return this.debitTotal !== this.creditTotal
+                ? { unequalTotals: true }
+                : null;
+        };
     }
 }
