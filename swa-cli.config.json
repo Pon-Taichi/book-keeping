@@ -1,14 +1,14 @@
 {
-  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
-  "configurations": {
-    "book-keeping": {
-      "appLocation": ".",
-      "apiLocation": "api",
-      "outputLocation": "dist/book-keeping",
-      "appBuildCommand": "npm run build",
-      "apiBuildCommand": "npm run build",
-      "run": "npm start",
-      "appDevserverUrl": "http://localhost:4200"
+    "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+    "configurations": {
+        "book-keeping": {
+            "appLocation": ".",
+            "apiLocation": "api",
+            "outputLocation": "dist/book-keeping/browser",
+            "appBuildCommand": "npm run build",
+            "apiBuildCommand": "npm run build",
+            "run": "npm start",
+            "appDevserverUrl": "http://localhost:4200"
+        }
     }
-  }
 }
