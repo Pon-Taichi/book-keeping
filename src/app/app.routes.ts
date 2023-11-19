@@ -5,11 +5,6 @@ import { JournalHistoryComponent } from './journal-history/journal-history.compo
 
 export const routes: Routes = [
     {
-        path: '',
-        redirectTo: '/records',
-        pathMatch: 'full',
-    },
-    {
         path: 'records',
         component: JournalEntryComponent,
     },
@@ -20,5 +15,9 @@ export const routes: Routes = [
     {
         path: 'history',
         component: JournalHistoryComponent,
+    },
+    {
+        path: '**',
+        redirectTo: '/records',
     },
 ];
