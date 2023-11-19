@@ -36,8 +36,17 @@ import { MatListModule } from '@angular/material/list';
                     </mat-list-item>
 
                     <mat-list-item class="menu-item">
+                        <a routerLink="/history">
+                            <mat-icon matListItemIcon>list</mat-icon>
+                            <span class="menu-name">仕訳一覧</span>
+                        </a>
+                    </mat-list-item>
+
+                    <mat-list-item class="menu-item">
                         <a routerLink="/accounts">
-                            <mat-icon matListItemIcon>dataset_linked</mat-icon>
+                            <mat-icon matListItemIcon
+                                >settings_application</mat-icon
+                            >
                             <span class="menu-name">勘定科目一覧</span>
                         </a>
                     </mat-list-item>

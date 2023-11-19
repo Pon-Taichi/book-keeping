@@ -1,5 +1,5 @@
 -- insert data
-INSERT INTO account (name, type) VALUES
+INSERT INTO accounts (name, type) VALUES
   ('現金', 'asset'),
   ('売掛金', 'asset'),
   ('建物', 'asset'),

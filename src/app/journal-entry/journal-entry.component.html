@@ -39,12 +39,13 @@
             >
                 <mat-form-field appearance="outline" class="account-name">
                     <mat-label for="debit-account">借方科目</mat-label>
-                    <input
-                        matInput
-                        id="debit-account"
-                        type="text"
-                        formControlName="account"
-                    />
+                    <mat-select formControlName="account">
+                        @for (option of accountOptions; track option) {
+                        <mat-option [value]="option.id">{{
+                            option.name
+                        }}</mat-option>
+                        }
+                    </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="amount">
@@ -97,12 +98,13 @@
             >
                 <mat-form-field appearance="outline" class="account-name">
                     <mat-label for="credit-account">貸方科目</mat-label>
-                    <input
-                        matInput
-                        id="credit-account"
-                        type="text"
-                        formControlName="account"
-                    />
+                    <mat-select formControlName="account">
+                        @for (option of accountOptions; track option) {
+                        <mat-option [value]="option.id">{{
+                            option.name
+                        }}</mat-option>
+                        }
+                    </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="amount">

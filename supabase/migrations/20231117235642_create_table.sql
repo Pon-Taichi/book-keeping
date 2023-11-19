@@ -4,17 +4,17 @@ CREATE TYPE account_type AS ENUM ('asset', 'liability', 'equity', 'revenue', 'ex
 -- enum for journal entry type
 CREATE TYPE journal_entry_type AS ENUM ('debit', 'credit');
 
-CREATE TABLE account (
+CREATE TABLE accounts (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     type account_type NOT NULL
 );
 
-CREATE TABLE journal_entry (
+CREATE TABLE journal_entries (
     id SERIAL PRIMARY KEY,
     -- 貸借
     type journal_entry_type NOT NULL,
-     -- 勘定科目
+    -- 勘定科目
     account_id INTEGER NOT NULL,
     -- 金額
     amount INTEGER NOT NULL,
@@ -28,5 +28,5 @@ CREATE TABLE journal_entry (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     -- 更新日時
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (account_id) REFERENCES account (id)
+    FOREIGN KEY (account_id) REFERENCES accounts (id)
 );

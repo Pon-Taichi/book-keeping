@@ -34,7 +34,7 @@ export interface Database {
   }
   public: {
     Tables: {
-      account: {
+      accounts: {
         Row: {
           id: number
           name: string
@@ -52,7 +52,7 @@ export interface Database {
         }
         Relationships: []
       }
-      journal_entry: {
+      journal_entries: {
         Row: {
           account_id: number
           amount: number
@@ -88,9 +88,9 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "journal_entry_account_id_fkey"
+            foreignKeyName: "journal_entries_account_id_fkey"
             columns: ["account_id"]
-            referencedRelation: "account"
+            referencedRelation: "accounts"
             referencedColumns: ["id"]
           }
         ]
