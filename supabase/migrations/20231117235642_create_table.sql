@@ -30,3 +30,10 @@ CREATE TABLE journal_entries (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (account_id) REFERENCES accounts (id)
 );
+
+alter table accounts enable row level security;
+alter table journal_entries enable row level security;
+
+create policy select_accounts on accounts for select using (true);
+create policy select_journal_entries on journal_entries for select using (true);
+create policy insert_journal_entries on journal_entries for insert with check (true);
