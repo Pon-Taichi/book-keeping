@@ -1,7 +1,8 @@
--- enum for account type
+-- 勘定科目テーブルと仕訳テーブルを作成
+-- 勘定科目テーブルに初期値を設定
+
 CREATE TYPE account_type AS ENUM ('asset', 'liability', 'equity', 'revenue', 'expense');
 
--- enum for journal entry type
 CREATE TYPE journal_entry_type AS ENUM ('debit', 'credit');
 
 CREATE TABLE accounts (
@@ -37,3 +38,20 @@ alter table journal_entries enable row level security;
 create policy select_accounts on accounts for select using (true);
 create policy select_journal_entries on journal_entries for select using (true);
 create policy insert_journal_entries on journal_entries for insert with check (true);
+
+INSERT INTO accounts (name, type) VALUES
+  ('現金', 'asset'),
+  ('売掛金', 'asset'),
+  ('建物', 'asset'),
+  ('土地', 'asset'),
+  ('買掛金', 'liability'),
+  ('借入金', 'liability'),
+  ('売上', 'revenue'),
+  ('受取利息', 'revenue'),
+  ('売上原価', 'expense'),
+  ('支払手数料', 'expense'),
+  ('減価償却費', 'expense'),
+  ('旅費交通費', 'expense'),
+  ('支払利息', 'expense'),
+  ('資本金', 'equity'),
+  ('利益剰余金', 'equity');
