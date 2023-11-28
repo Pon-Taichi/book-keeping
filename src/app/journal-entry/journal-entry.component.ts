@@ -24,7 +24,7 @@ import { JPDateAdapter } from '../date-adapter';
 import { AccountService } from '../services/account.service';
 import { MatSelectModule } from '@angular/material/select';
 import { JournalEntryService } from '../services/journal-entry.service';
-import { Database } from 'schema';
+import { JournalEntryForm } from '../types/journal-entry';
 
 @Component({
     selector: 'app-journal-entry',
@@ -94,8 +94,14 @@ export class JournalEntryComponent implements OnInit, OnDestroy {
 
     journalGroup = this.form.group(
         {
-            date: this.form.control<Date | null>(null, Validators.required),
-            partner: this.form.control<string>('', Validators.required),
+            date: this.form.control<Date>(new Date(), {
+                nonNullable: true,
+                validators: Validators.required,
+            }),
+            partner: this.form.control<string>('', {
+                nonNullable: true,
+                validators: Validators.required,
+            }),
 
             // 初期値はentryが1つ
             debitEntries: this.form.array<
@@ -109,7 +115,7 @@ export class JournalEntryComponent implements OnInit, OnDestroy {
                     account: FormControl<number>;
                     amount: FormControl<number>;
                 }>
-            >([this.createEntry()]),
+            >([this.createEntry()], Validators.required),
         },
         { validators: this.validateTotals() }
     );
@@ -119,11 +125,8 @@ export class JournalEntryComponent implements OnInit, OnDestroy {
 
     createEntry(): FormGroup {
         return this.form.group({
-            account: this.form.control<number | null>(
-                null,
-                Validators.required
-            ),
-            amount: this.form.control<number>(0),
+            account: this.form.control<number>(0, Validators.required),
+            amount: this.form.control<number>(0, Validators.required),
         });
     }
 
@@ -147,52 +150,10 @@ export class JournalEntryComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const journalEntry = this.createParam();
-        await this.journalEntryService.createJournalEntry(journalEntry);
+        const formValue: JournalEntryForm = this.journalGroup.getRawValue();
+
+        await this.journalEntryService.createJournalEntry(formValue);
         this.resetJournalForm();
-    }
-
-    createParam(): Database['public']['Tables']['journal_entries']['Insert'][] {
-        const value = this.journalGroup.value;
-        const ret: Database['public']['Tables']['journal_entries']['Insert'][] =
-            [];
-
-        const date = value.date?.toLocaleDateString() as string;
-        const partner = value.partner as string;
-
-        // debit
-        value.debitEntries?.forEach((entry: any) => {
-            if (!entry) {
-                return;
-            }
-            const account_id = entry.account as number;
-            const amount = entry.amount as number;
-            ret.push({
-                account_id,
-                amount,
-                date,
-                partner,
-                type: 'debit',
-            });
-        });
-
-        // credit
-        value.creditEntries?.forEach((entry: any) => {
-            if (!entry) {
-                return;
-            }
-            const account_id = entry.account as number;
-            const amount = entry.amount as number;
-            ret.push({
-                account_id,
-                amount,
-                date,
-                partner,
-                type: 'credit',
-            });
-        });
-
-        return ret;
     }
 
     calculateTotal(entries: FormArray): number {

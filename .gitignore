@@ -45,3 +45,5 @@ Thumbs.db
 __blobstorage__/
 __azurite_db_blob_extent__.json
 __azurite_db_blob__.json
+
+sql/

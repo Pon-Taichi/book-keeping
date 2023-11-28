@@ -52,48 +52,181 @@ export interface Database {
         }
         Relationships: []
       }
-      journal_entries: {
+      credit_entries: {
         Row: {
           account_id: number
           amount: number
           created_at: string | null
-          date: string
           id: number
-          partner: string
+          journal_entry_id: number
           summary: string | null
-          type: Database["public"]["Enums"]["journal_entry_type"]
           updated_at: string | null
         }
         Insert: {
           account_id: number
           amount: number
           created_at?: string | null
-          date: string
           id?: number
-          partner: string
+          journal_entry_id: number
           summary?: string | null
-          type: Database["public"]["Enums"]["journal_entry_type"]
           updated_at?: string | null
         }
         Update: {
           account_id?: number
           amount?: number
           created_at?: string | null
-          date?: string
           id?: number
-          partner?: string
+          journal_entry_id?: number
           summary?: string | null
-          type?: Database["public"]["Enums"]["journal_entry_type"]
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "journal_entries_account_id_fkey"
+            foreignKeyName: "credit_entries_account_id_fkey"
             columns: ["account_id"]
             referencedRelation: "accounts"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_entries_journal_entry_id_fkey"
+            columns: ["journal_entry_id"]
+            referencedRelation: "journal_entries"
+            referencedColumns: ["id"]
           }
         ]
+      }
+      debit_entries: {
+        Row: {
+          account_id: number
+          amount: number
+          created_at: string | null
+          id: number
+          journal_entry_id: number
+          summary: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          account_id: number
+          amount: number
+          created_at?: string | null
+          id?: number
+          journal_entry_id: number
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          account_id?: number
+          amount?: number
+          created_at?: string | null
+          id?: number
+          journal_entry_id?: number
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debit_entries_account_id_fkey"
+            columns: ["account_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "debit_entries_journal_entry_id_fkey"
+            columns: ["journal_entry_id"]
+            referencedRelation: "journal_entries"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      journal_entries: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: number
+          partner: string
+          summary: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: number
+          partner: string
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: number
+          partner?: string
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      journal_entries_test: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: number
+          partner: string
+          summary: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: number
+          partner: string
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: number
+          partner?: string
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      journal_entries_tmp: {
+        Row: {
+          account_id: number | null
+          amount: number | null
+          created_at: string | null
+          date: string | null
+          id: number | null
+          partner: string | null
+          summary: string | null
+          type: Database["public"]["Enums"]["journal_entry_type"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          account_id?: number | null
+          amount?: number | null
+          created_at?: string | null
+          date?: string | null
+          id?: number | null
+          partner?: string | null
+          summary?: string | null
+          type?: Database["public"]["Enums"]["journal_entry_type"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          account_id?: number | null
+          amount?: number | null
+          created_at?: string | null
+          date?: string | null
+          id?: number | null
+          partner?: string | null
+          summary?: string | null
+          type?: Database["public"]["Enums"]["journal_entry_type"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       test_tenant: {
         Row: {
@@ -115,7 +248,17 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_journal_entry:
+        | {
+            Args: {
+              param: Json
+            }
+            Returns: undefined
+          }
+        | {
+            Args: Record<PropertyKey, never>
+            Returns: undefined
+          }
     }
     Enums: {
       account_type: "asset" | "liability" | "equity" | "revenue" | "expense"
@@ -136,6 +279,7 @@ export interface Database {
           id: string
           name: string
           owner: string | null
+          owner_id: string | null
           public: boolean | null
           updated_at: string | null
         }
@@ -147,6 +291,7 @@ export interface Database {
           id: string
           name: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
@@ -158,17 +303,11 @@ export interface Database {
           id?: string
           name?: string
           owner?: string | null
+          owner_id?: string | null
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       migrations: {
         Row: {
@@ -200,6 +339,7 @@ export interface Database {
           metadata: Json | null
           name: string | null
           owner: string | null
+          owner_id: string | null
           path_tokens: string[] | null
           updated_at: string | null
           version: string | null
@@ -212,6 +352,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
@@ -224,6 +365,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
           owner?: string | null
+          owner_id?: string | null
           path_tokens?: string[] | null
           updated_at?: string | null
           version?: string | null
